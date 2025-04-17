@@ -1,0 +1,37 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: shop-scaledobject
+  namespace: aws9c
+spec:
+  scaleTargetRef:
+    name: aws9-deploy-shop
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Asia/Seoul
+      start: "0 9 * * *"       # 오전 9시
+      end: "0 18 * * *"        # 오후 6시
+      desiredReplicas: "3"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: shop-hpa
+  namespace: aws9c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aws9-deploy-shop
+  minReplicas: 1  # 최소는 cron으로 제어 중이지만, HPA에도 같이 맞춰줌
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
