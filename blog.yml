@@ -19,7 +19,7 @@ metadata:
   name: aws9-deploy-blog
   namespace: aws9c
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       color: black
