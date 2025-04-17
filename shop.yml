@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws9-deploy-shop
+  namespcae: aws9c
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      color: blue    # (1)Pod 작성시 이 부분(label -> app: web)이 포함되어야 함
+  template:   # 여기에서 부터 Pod 작성
+    metadata:
+      labels:
+        color: blue  # 반드시 (1) 과 동일해야 함
+    spec:
+      containers:
+        - name: aws9ctn-shop
+          image: brian24/aws9:blue
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws9-svc-shop
+spec:
+  ports:
+  - name: aws9-port-shop
