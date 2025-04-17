@@ -48,7 +48,7 @@ metadata:
   namespace: aws9c
 spec:
   maxReplicas: 15
-  minReplicas: 3
+  minReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
